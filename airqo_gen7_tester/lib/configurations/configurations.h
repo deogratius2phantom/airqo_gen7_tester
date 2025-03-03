@@ -6,6 +6,7 @@
 // Example configuration settings
 #include <Arduino.h>
 #include <SD.h>
+#include <Wire.h>
 #include <ArduinoJson.h>
 #include <pin_definitions.h>
 const int WRITTEN_SIGNATURE = 0xBEEFDEED;
@@ -25,4 +26,6 @@ bool initialize_sd();
 int load_sd_configuration();
 void load_eeprom_configuration();
 void clear_eeprom_configuration();
+void initialize_pin_modes();
+void scan_i2c();
 #endif // CONFIGURATIONS_H

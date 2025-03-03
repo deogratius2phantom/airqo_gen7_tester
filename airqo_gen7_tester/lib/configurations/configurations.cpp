@@ -10,7 +10,7 @@ int load_sd_configuration() {
         File configFile = SD.open("config.txt", FILE_WRITE);
         if (configFile) {
             StaticJsonDocument<256> doc;
-            doc["DEVICE_NAME"] = "SMART_WATER_PROBE_X";
+            doc["DEVICE_NAME"] = "AIQO_GXXX";
             doc["DEVICE_WRITE_API_KEY"] = "YOUR_WRITE_API_KEY";
             doc["DEVICE_READ_API_KEY"] = "YOUR_READ_API_KEY";
             doc["DEVICE_CHANEL_ID"] = "YOUR_CHANEL_ID";
@@ -228,4 +228,51 @@ void clear_eeprom_configuration() {
         EEPROM.write(i, 0);
     }
     Serial.println(F("EEPROM configuration cleared!"));
+}
+void initialize_pin_modes()
+{
+    pinMode(GSM_POWER_SWITCH_PIN, OUTPUT);
+    pinMode(I2C_DEVICES_POWER_PIN, OUTPUT);
+    pinMode(RTC_POWER_PIN, OUTPUT);
+    pinMode(GPS_POWER_PIN, OUTPUT);
+    pinMode(SD_CARD_POWER_PIN, OUTPUT);
+    pinMode(PM_SENSOR_POWER_PIN, OUTPUT);
+    pinMode(POWER_SENSE_PIN, INPUT);
+    pinMode(SD_CS_PIN, INPUT);
+
+    digitalWrite(RTC_POWER_PIN, HIGH);
+    digitalWrite(I2C_DEVICES_POWER_PIN, HIGH);
+}
+void scan_i2c() {
+    Wire.begin();
+    Serial.println(F("Scanning I2C bus..."));
+    byte error, address;
+    int nDevices = 0;
+
+    for (address = 1; address < 127; address++) {
+        Wire.beginTransmission(address);
+        error = Wire.endTransmission();
+
+        if (error == 0) {
+            Serial.print(F("I2C device found at address 0x"));
+            if (address < 16) {
+                Serial.print(F("0"));
+            }
+            Serial.print(address, HEX);
+            Serial.println(F(" !"));
+
+            nDevices++;
+        } else if (error == 4) {
+            Serial.print(F("Unknown error at address 0x"));
+            if (address < 16) {
+                Serial.print(F("0"));
+            }
+            Serial.println(address, HEX);
+        }
+    }
+    if (nDevices == 0) {
+        Serial.println(F("No I2C devices found."));
+    } else {
+        Serial.println(F("I2C scan complete."));
+    }
 }
