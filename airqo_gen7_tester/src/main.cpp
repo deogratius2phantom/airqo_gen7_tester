@@ -68,7 +68,7 @@ void loop() {
 
 // // ThingSpeak API
 // const char server[] = "34.132.108.60";//"api.thingspeak.com";
-// // const String apiKey = "3WN7JU712JH0D99F";  // Your ThingSpeak API Key
+// // const String apiKey = "";  // Your ThingSpeak API Key
 
 // String imsi = "";
 
